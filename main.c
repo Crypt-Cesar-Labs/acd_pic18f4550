@@ -20,17 +20,17 @@
 #include "lcd.h"
 
 void main(void){
-	ADCON1 = 0b00001110;		//
-	TRISD = 0x00;
-	TRISA = 0x01;
-	TRISE = 0x00;
+	ADCON1 = 0b00001110;		// VCFG0 Voltage Reference Vss and Vdd- PCFG3:PCFG0 just AN0
+	TRISD = 0x00;			// Output for the LCD
+	TRISA = 0x01;			// A0 as analog input 
+	TRISE = 0x00;			// E0 Blue LED - El Red LED
 
 	LATE = 0xFF;
 	Lcd_Init();
-	ADCON0 = 0b00000000;
-	ADCON2 = 0b10010110;
+	ADCON0 = 0b00000000;		//Channel 0 (AN0) - GO_DONE in 0 - A/D converter module is disabled
+	ADCON2 = 0b10010110;		//ADFM Right Justified - ADCS2:ADCS0 4 TAD - ADCS2:ADCS0 Fosc/64
 
-	ADCON0bits.ADON = 1;
+	ADCON0bits.ADON = 1;		//A/D converter module is enabled
 	__delay_us(3);
 
 	Lcd_Clear();
@@ -43,7 +43,8 @@ void main(void){
 	unit16_lectura = 0;
 
 	while(1){
-		ADCON0bits.GO_DONE = 1;
+
+		ADCON0bits.GO_DONE = 1;			//Convertion in progress 
 		while(ADCON0bits.GO_DONE){
 		
 		}
