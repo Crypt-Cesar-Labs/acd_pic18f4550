@@ -41,34 +41,35 @@ void main(void){
 	__delay_ms(2500);
 
 	unit16_lectura = 0;
+	unsigned int i = 0;
+	unit16_lecturaArr[9];
+	unsigned int total= 0;
+	float promedio=0;
 
 	while(1){
-
-		ADCON0bits.GO_DONE = 1;			//Convertion in progress 
-		while(ADCON0bits.GO_DONE){
 		
-		}
+		for(i; i>=9;i++){
 
-		__delay_us(3);
+			ADCON0bits.GO_DONE = 1;			//Convertion in progress 
+			while(ADCON0bits.GO_DONE){
+		
+			}
+	
+			__delay_us(3);
 
-		lectura = ADRESH;
-		lectura = (lectura << 0) | ADRESL;
+			lecturaArr[i] = ADRESH;
+			lecturaArr[i] = (lectura << 0) | ADRESL;
+			total+=lectura[i];
 
-		if (lectura > 512){
-			LATE = 0b11111101;
-			Lcd_Set_Cursor(1,1);
-			Lcd_Write_String("!!!!!PELIGRO!!!!");
-			Lcd_Set_Cursor(2,1);
-			Lcd_Write_String("ALTA TEMPERATURA");
+			promedio = total/10.0; 			//Se saca el promedio 
+			
 		}
-		else{
-			LATE=0xFE;
-			Lcd_Clear();
-			Lcd_Set_Cursor(1,2);
-			Lcd_Write_String("Felix Armenta");
-			Lcd_Set_Cursor(2,3);
-			Lcd_Write_String("RANGO NORMAL");
-		}
+		Lcd_Clear();
+		Lcd_Set_Cursor(1,1);
+		Lcd_Write_String("TEMPERATURA");
+		Lcd_Set_Cursor(2,1);
+		Lcd_Write_String(promedio);
+
 		__delay_ms(316);
 	}
 	return;
